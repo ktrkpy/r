@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ไก่ตันราคาถูก - เว็บสุ่มของ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ไก่ตันราคาถูก</h1>
+            <div id="user-section">
+                <div id="login-form" class="hidden">
+                    <input type="text" id="username" placeholder="ชื่อผู้ใช้">
+                    <input type="password" id="password" placeholder="รหัสผ่าน">
+                    <button id="login-btn">เข้าสู่ระบบ</button>
+                    <button id="register-btn">สมัครสมาชิก</button>
+                </div>
+                <div id="user-info" class="hidden">
+                    <span id="welcome-msg">ยินดีต้อนรับ, <span id="display-username"></span></span>
+                    <span id="balance">ยอดเงิน: <span id="balance-amount">0</span>฿</span>
+                    <button id="logout-btn">ออกจากระบบ</button>
+                    <button id="topup-btn">เติมเงิน</button>
+                    <button id="angpao-btn">ส่งอั่งเปา</button>
+                    <button id="check-codes-btn" onclick="checkMyUsedCodes()">ตรวจสอบโค้ด</button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section id="random-items">
+                <div class="item-card">
+                    <h2>สุ่มไอดี 1฿</h2>
+                    <p>ราคา: 1฿</p>
+                    <button class="buy-btn" data-price="1" data-type="id1">ซื้อ</button>
+                </div>
+                <div class="item-card">
+                    <h2>สุ่มไอดีไม่มีเกลือ</h2>
+                    <p>ราคา: 50฿</p>
+                    <button class="buy-btn" data-price="50" data-type="id2">ซื้อ</button>
+                </div>
+            </section>
+
+            <section id="result-section" class="hidden">
+                <h2>ผลการสุ่ม</h2>
+                <div id="result-content"></div>
+            </section>
+
+            <section id="transaction-history" class="hidden">
+                <h2>ประวัติการทำรายการ</h2>
+                <div id="transaction-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal สำหรับเติมเงิน -->
+    <div id="topup-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>เติมเงิน</h2>
+            <div class="topup-options">
+                <button class="topup-option" data-amount="50">50฿</button>
+                <button class="topup-option" data-amount="100">100฿</button>
+                <button class="topup-option" data-amount="500">500฿</button>
+                <button class="topup-option" data-amount="1000">1,000฿</button>
+            </div>
+            <input type="text" id="topup-code" placeholder="หรือกรอกรหัสเติมเงิน">
+            <button id="submit-topup">ยืนยัน</button>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับ QR Code -->
+    <div id="qr-modal" class="modal hidden">
+        <div class="modal-content qr-payment-modal">
+            <span class="close">&times;</span>
+            
+            <div class="qr-header">
+                <h2>THAI QR PAYMENT</h2>
+                <div class="promptpay-badge">
+                    <span>Prompt Pay</span>
+                </div>
+            </div>
+            
+            <div id="qr-container">
+                <div class="qr-instruction">
+                    <p>สแกน QR เพื่อโอนเข้าบัญชี</p>
+                </div>
+                
+                <div id="qrcode"></div>
+                
+                <div class="payment-info">
+                    <div class="info-row">
+                        <span class="label">ชื่อ:</span>
+                        <span class="value">นาย อนุวัฒน์ หาววิสัย</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">บัญชี:</span>
+                        <span class="value">XXX-X-X7897-X</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">เลขที่อ้างอิง:</span>
+                        <span class="value" id="qr-ref">004999214544925</span>
+                    </div>
+                    <div class="info-row amount-row">
+                        <span class="label">จำนวนเงิน:</span>
+                        <span class="value amount" id="qr-amount">0.00</span>
+                        <span class="currency">฿</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="qr-footer">
+                <div class="bank-support">
+                    <span class="kplus-badge">K+</span>
+                    <span>Accepts all banks | รับเงินได้จากทุกธนาคาร</span>
+                </div>
+            </div>
+            
+            <div id="payment-status">
+                <p class="status-waiting">⏳ รอการชำระเงิน...</p>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+                <button id="cancel-payment" class="btn-secondary">ยกเลิกการชำระเงิน</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับส่งอั่งเปา -->
+    <div id="angpao-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>ส่งอั่งเปา</h2>
+            <div class="angpao-options">
+                <button class="angpao-option" data-amount="9">9฿</button>
+                <button class="angpao-option" data-amount="19">19฿</button>
+                <button class="angpao-option" data-amount="39">39฿</button>
+                <button class="angpao-option" data-amount="99">99฿</button>
+                <button class="angpao-option" data-amount="199">199฿</button>
+            </div>
+            <input type="number" id="custom-amount" placeholder="หรือกำหนดจำนวนเงินเอง" min="1" max="1000">
+            <input type="text" id="angpao-message" placeholder="ข้อความอวยพร (ไม่จำเป็น)">
+            <button id="create-angpao">สร้างอั่งเปา</button>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับรับอั่งเปา -->
+    <div id="receive-angpao-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>อั่งเปา</h2>
+            <div id="angpao-content">
+                <div class="angpao-envelope">
+                    <div class="angpao-lid"></div>
+                    <div class="angpao-body">
+                        <p id="angpao-sender">จาก: <span id="sender-name"></span></p>
+                        <p id="angpao-amount">จำนวน: <span id="amount-value"></span>฿</p>
+                        <p id="angpao-message-text">ข้อความ: <span id="message-text"></span></p>
+                    </div>
+                </div>
+            </div>
+            <button id="open-angpao">เปิดอั่งเปา</button>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับสร้างโค้ด -->
+    <div id="generate-code-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>สร้างโค้ดเติมเงิน</h2>
+            
+            <div class="form-group">
+                <label>จำนวนเงิน (฿):</label>
+                <input type="number" id="code-amount" min="1" max="1000" value="50">
+            </div>
+            
+            <div class="form-group">
+                <label>จำนวนโค้ด:</label>
+                <input type="number" id="code-count" min="1" max="20" value="5">
+            </div>
+            
+            <div class="form-group">
+                <label>หมดอายุใน (ชั่วโมง):</label>
+                <select id="code-expires">
+                    <option value="1">1 ชั่วโมง</option>
+                    <option value="6">6 ชั่วโมง</option>
+                    <option value="24" selected>24 ชั่วโมง</option>
+                    <option value="72">3 วัน</option>
+                    <option value="168">7 วัน</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>รหัสที่กำหนด (ไม่จำเป็น):</label>
+                <input type="text" id="custom-code" placeholder="ว่างไว้เพื่อสร้างอัตโนมัติ">
+            </div>
+            
+            <button onclick="generateCustomCodes()">สร้างโค้ด</button>
+            
+            <div id="generated-codes-result" style="margin-top: 15px; display: none;">
+                <h3>โค้ดที่สร้าง:</h3>
+                <div id="codes-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal สำหรับสมัครสมาชิก -->
+    <div id="register-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>สมัครสมาชิก</h2>
+            <input type="text" id="reg-username" placeholder="ชื่อผู้ใช้">
+            <input type="password" id="reg-password" placeholder="รหัสผ่าน">
+            <button id="submit-register">สมัครสมาชิก</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
