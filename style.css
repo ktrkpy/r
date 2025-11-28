@@ -1,0 +1,619 @@
+/* ตัวแปรสี */
+:root {
+    --primary-red: #ff0000;
+    --primary-black: #000000;
+    --dark-gray: #333333;
+    --light-gray: #f5f5f5;
+    --white: #ffffff;
+}
+
+/* รีเซ็ตพื้นฐาน */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: var(--primary-black);
+    color: var(--white);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ส่วนหัว */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 2px solid var(--primary-red);
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--primary-red);
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
+}
+
+#user-section {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    padding: 8px 12px;
+    border: 1px solid var(--primary-red);
+    background-color: var(--dark-gray);
+    color: var(--white);
+    border-radius: 4px;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: var(--primary-red);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #cc0000;
+}
+
+/* ส่วนหลัก */
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#random-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.item-card {
+    background-color: var(--dark-gray);
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+}
+
+.item-card h2 {
+    color: var(--primary-red);
+    margin-bottom: 10px;
+}
+
+.item-card p {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.buy-btn {
+    background-color: var(--primary-red);
+    color: var(--white);
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.buy-btn:hover {
+    background-color: #cc0000;
+}
+
+/* ส่วนผลลัพธ์ */
+#result-section {
+    background-color: var(--dark-gray);
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+#result-content {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--dark-gray);
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--primary-red);
+}
+
+/* สไตล์สำหรับผลลัพธ์พิเศษ */
+.special-result {
+    background: linear-gradient(45deg, #ff0000, #ff9900, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+    background-size: 600% 600%;
+    animation: rainbow 3s ease infinite;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    border: 3px solid gold;
+}
+
+@keyframes rainbow {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+}
+
+.special-result h3 {
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.special-result p {
+    margin: 10px 0;
+}
+
+/* ตัวเลือกเติมเงิน */
+.topup-options, .angpao-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.topup-option, .angpao-option {
+    padding: 15px;
+    background: var(--dark-gray);
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.1rem;
+}
+
+.topup-option:hover, .angpao-option:hover {
+    background: var(--primary-red);
+    transform: scale(1.05);
+}
+
+.topup-option.active, .angpao-option.active {
+    background: var(--primary-red);
+    border-color: gold;
+}
+
+/* สไตล์สำหรับ QR Payment Modal */
+.qr-payment-modal {
+    max-width: 400px;
+    text-align: center;
+}
+
+.qr-header {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    margin: -30px -30px 20px -30px;
+}
+
+.qr-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.promptpay-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 5px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.qr-instruction {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.qr-instruction p {
+    margin: 0;
+    color: #333;
+    font-weight: bold;
+}
+
+.payment-info {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: left;
+    color: #333;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.amount-row {
+    background: #fff3cd;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 2px solid #ffc107;
+}
+
+.label {
+    font-weight: bold;
+    color: #666;
+    min-width: 120px;
+}
+
+.value {
+    color: #333;
+    font-weight: 500;
+}
+
+.amount {
+    color: #e74c3c;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.currency {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.qr-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.bank-support {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.kplus-badge {
+    background: #e74c3c;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+/* สถานะการชำระเงิน */
+.status-waiting {
+    color: #e67e22;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+}
+
+.loading-bar {
+    width: 100%;
+    height: 8px;
+    background: #ecf0f1;
+    border-radius: 4px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #f39c12);
+    border-radius: 4px;
+    animation: loading 2s ease-in-out infinite;
+}
+
+@keyframes loading {
+    0% { 
+        transform: translateX(-100%); 
+    }
+    50% { 
+        transform: translateX(0%); 
+    }
+    100% { 
+        transform: translateX(100%); 
+    }
+}
+
+.btn-secondary {
+    background: #95a5a6 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.btn-secondary:hover {
+    background: #7f8c8d !important;
+}
+
+/* อั่งเปา */
+.angpao-envelope {
+    width: 200px;
+    height: 120px;
+    margin: 0 auto 20px;
+    position: relative;
+    background: #e74c3c;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.angpao-lid {
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: #c0392b;
+    border-radius: 10px 10px 0 0;
+    z-index: 2;
+}
+
+.angpao-body {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    background: #ff6b6b;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: gold;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.angpao-envelope.open .angpao-lid {
+    transform: rotate(-15deg);
+    transform-origin: left top;
+    transition: transform 0.5s;
+}
+
+/* ประวัติการทำรายการ */
+#transaction-history {
+    background: var(--dark-gray);
+    border: 2px solid var(--primary-red);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.transaction-item {
+    padding: 10px;
+    margin: 5px 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    border-left: 4px solid var(--primary-red);
+}
+
+.transaction-credit {
+    border-left-color: #4CAF50;
+}
+
+.transaction-debit {
+    border-left-color: #f44336;
+}
+
+.transaction-amount {
+    font-weight: bold;
+    float: right;
+}
+
+/* สไตล์ปุ่มตรวจสอบโค้ด */
+#check-codes-btn {
+    background: #3498db !important;
+    color: white !important;
+}
+
+#check-codes-btn:hover {
+    background: #2980b9 !important;
+}
+
+/* สไตล์คำแนะนำโค้ด */
+#code-instructions {
+    background: #2c3e50 !important;
+    color: white !important;
+    border: 1px solid #34495e !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin-top: 15px !important;
+    font-size: 0.9rem !important;
+}
+
+#code-instructions strong {
+    color: #3498db !important;
+    display: block !important;
+    margin-bottom: 8px !important;
+}
+
+#code-instructions small {
+    color: #bdc3c7 !important;
+    display: block !important;
+    margin-top: 8px !important;
+}
+
+/* สไตล์สำหรับ Modal สร้างโค้ด */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #ecf0f1;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #34495e;
+    background: #2c3e50;
+    color: white;
+    border-radius: 4px;
+}
+
+#generated-codes-result {
+    background: #34495e;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #7f8c8d;
+}
+
+#codes-list {
+    font-family: monospace;
+    background: #2c3e50;
+    padding: 10px;
+    border-radius: 3px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* ปุ่มแอดมิน */
+#user-info button {
+    margin: 2px;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.text-success { color: #4CAF50; }
+.text-danger { color: #f44336; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    #user-section {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    input, button {
+        width: 100%;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .item-card {
+        padding: 15px;
+    }
+
+    .topup-options, .angpao-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .angpao-envelope {
+        width: 150px;
+        height: 100px;
+    }
+
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .label {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .qr-payment-modal {
+        margin: 10px;
+        max-width: calc(100vw - 20px);
+    }
+    
+    .qr-header {
+        margin: -20px -20px 20px -20px;
+        padding: 15px;
+    }
+}
